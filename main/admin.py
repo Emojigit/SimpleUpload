@@ -48,3 +48,6 @@ class TextAdmin(admin.ModelAdmin):
     form = TextAdminForm
 
 admin.site.register(Text, TextAdmin)
+
+admin.site.site_header = "SimpleUpload Management Panel"
+admin.site.site_title = "SimpleUpload"

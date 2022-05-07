@@ -13,4 +13,8 @@ def main(request, location: str):
     else:
         return HttpResponse("Not found", content_type="text/plain", status=404)
 
+def change(request, location: str):
+    return redirect("/admin/main/text/{}/change/".format(location))
+
+
 
