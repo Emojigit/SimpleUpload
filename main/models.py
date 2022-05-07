@@ -24,14 +24,13 @@ class Creators(models.Model):
 class Text(models.Model):
     creator = models.ForeignKey(User,on_delete=models.CASCADE,help_text="The owner of this text")
     location = models.CharField(max_length=200,help_text="Location of the file",primary_key=True)
-    content = models.TextField(help_text="Content of the file")
-    MMIE_choices = (
-        ("text/plain", "Plain Text"),
-        ("text/html", "HTML"),
-        ("text/css", "CSS"),
-        ("text/javascript", "Javascript"),
-    )
-    MMIE = models.CharField(max_length=200,default="text/plain",choices=MMIE_choices,help_text="MMIE of the file, choose Plain Text if you don't know what to do")
+    content = models.TextField(max_length=40000,help_text="Content of the file")
+    MMIE = models.CharField(max_length=200,default="text/plain",help_text="MMIE of the file, choose text/plain if you don't know what to do")
+    b64 = models.BooleanField(default=False,help_text="If yes, the content will be treated as base64.")
+    b64.short_description='B64'
+    b64.description='base64'
+    def __str__(self):
+        return "File: " + self.location
 
 
 

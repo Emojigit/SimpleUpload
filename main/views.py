@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from main.models import Text
+import base64
 
 # Create your views here.
 
@@ -9,7 +10,10 @@ def main(request, location: str):
         text = Text.objects.get(location = location)
         content = text.content
         MMIE = text.MMIE
-        return HttpResponse(content, content_type=MMIE)
+        if text.b64:
+            return HttpResponse(base64.b64decode(content), content_type=MMIE)
+        else:
+            return HttpResponse(content, content_type=MMIE)
     else:
         return HttpResponse("Not found", content_type="text/plain", status=404)
 

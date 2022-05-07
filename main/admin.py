@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from main.models import Text
+from django.utils.html import format_html
 
 # Register your models here.
 
@@ -17,14 +18,16 @@ class TextAdminForm(forms.ModelForm):
             raise forms.ValidationError("Hmm... DO NOT INCLUDE SLASHES IN LOCATION!")
         return super().clean(*args, **kwargs)
     def get_fields(self, request, obj=None):
-        fields = ['location','content','MMIE']
+        fields = ['location','content','MMIE','b64']
         if request.user.is_superuser or (obj != None and obj.creator != None and request.user == obj.creator):
             fields.append('creator')
         return fields
 
 
+
+
 class TextAdmin(admin.ModelAdmin):
-    list_display = ('location','MMIE', 'creator')
+    list_display = ('location','MMIE', 'creator','show_access_url','b64')
     list_display_links = ('location', )
     save_as = True
     def save_model(self, request, obj, form, change):
@@ -44,6 +47,10 @@ class TextAdmin(admin.ModelAdmin):
         if obj is not None and obj.creator != request.user:
             return False
         return True
+    def show_access_url(self,obj):
+        return format_html('<a href="/{0}">/{0}</a>&nbsp;',obj.location)
+    show_access_url.short_description = 'Access Link'
+    show_access_url.allow_tags = True
 
     form = TextAdminForm
 
